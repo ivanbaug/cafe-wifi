@@ -3,6 +3,7 @@ import { Container } from 'react-bootstrap';
 
 import Header from './components/Header';
 import Footer from './components/Footer';
+import CafeCard from './components/CafeCard';
 
 
 function App() {
@@ -11,8 +12,11 @@ function App() {
 
       <Header />
       <main className='py-3'>
-        <Container>
-          <h1>Welcome 2</h1>
+        <Container fluid='md'>
+
+          <CafeCard />
+          <CafeCard />
+          <CafeCard />
         </Container>
       </main>
       <Footer />
