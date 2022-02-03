@@ -1,10 +1,21 @@
-main{
+main {
   min-height: 80vh;
 }
 
 /* Background cream color */
 body {
   background-color: #ece0d1 !important;
+  overflow-y: scroll;
 }
 
 /* ************************************ */
+
+.cont-width {
+  width: 70% !important;
+  margin: 0 auto;
+}
+@media (max-width: 720px) {
+  .cont-width {
+    width: 95% !important;
+  }
+}
