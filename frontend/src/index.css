@@ -12,6 +12,7 @@ body {
 
 .cont-width {
   width: 70% !important;
+  max-width: 750px !important;
   margin: 0 auto;
 }
 @media (max-width: 720px) {

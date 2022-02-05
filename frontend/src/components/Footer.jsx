@@ -6,7 +6,12 @@ const Footer = () => {
     <footer>
       <Container>
         <Row>
-          <Col className='text-center py-3' >Copyright &copy; Ivan B</Col>
+          <Col className='text-center pt-3' >Copyright &copy; Ivan Bautista {new Date().getFullYear()}</Col>
+        </Row>
+        <Row>
+          <Col className='text-center pb-3' >
+            Check the code in my <a href="https://github.com/ivanbaug/cafe-wifi">Github <i className='fab fa-github' /></a>
+          </Col>
         </Row>
       </Container>
     </footer>

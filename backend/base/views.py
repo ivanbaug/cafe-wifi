@@ -27,7 +27,11 @@ def get_routes(request):
 def get_cafes(request):
     cafes = Cafe.objects.all()
     serializer = CafeSerializer(cafes, many=True)
-    return Response(serializer.data)
+    return Response(
+        {
+            "cafes": serializer.data,
+        }
+    )
 
 
 @api_view(["GET"])
