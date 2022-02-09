@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { listCafes } from '../actions/cafeActions'
 import CafeCard from '../components/CafeCard';
 import Loader from '../components/Loader';
-import { useDispatch, useSelector } from 'react-redux';
-
-import { listCafes } from '../actions/cafeActions'
+import Message from '../components/Message';
 
 const HomeScreen = () => {
   const dispatch = useDispatch()
@@ -12,13 +12,7 @@ const HomeScreen = () => {
   const { error, loading, cafes } = cafeList
 
   useEffect(() => {
-    // async function fetchCafes() {
-    //   const { data } = await axios.get('http://127.0.0.1:8000/api/cafes/')
-    //   setCafes(data)
-    // }
-    // fetchCafes()
     dispatch(listCafes())
-
   }, [dispatch])
 
   return (
@@ -27,9 +21,11 @@ const HomeScreen = () => {
       {
         loading
           ? <Loader />
-          : (
-            cafes.map((cafe) => (<CafeCard key={cafe.id} cafe={cafe} />))
-          )
+          : error
+            ? <Message variant='danger' >{error}</Message>
+            : (
+              cafes.map((cafe) => (<CafeCard key={cafe.id} cafe={cafe} />))
+            )
       }
     </>
   );

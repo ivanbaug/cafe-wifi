@@ -4,7 +4,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import HomeScreen from './screens/HomeScreen';
 import CafeScreen from './screens/CafeScreen';
-
+import LoginScreen from './screens/LoginScreen';
 
 
 function App() {
@@ -16,6 +16,7 @@ function App() {
           <Routes>
             <Route path='/' exact element={<HomeScreen />} />
             <Route path='/cafe/:id' element={<CafeScreen />} />
+            <Route path='/login' element={<LoginScreen />} />
           </Routes>
         </Container>
       </main>

@@ -42,3 +42,16 @@ export const cafeListReducer = (state = { cafes: [] }, action) => {
       return state
   }
 }
+
+export const cafeDetailsReducer = (state = { cafe: {} }, action) => {
+  switch (action.type) {
+    case CAFE_DETAILS_REQUEST:
+      return { loading: true, ...state }
+    case CAFE_DETAILS_SUCCESS:
+      return { loading: false, cafe: action.payload }
+    case CAFE_DETAILS_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}

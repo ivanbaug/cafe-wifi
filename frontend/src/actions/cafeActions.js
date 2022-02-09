@@ -45,3 +45,22 @@ export const listCafes = (keyword = '') => async (dispatch) => {
     })
   }
 }
+
+export const listCafeDetails = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: CAFE_DETAILS_REQUEST })
+    const { data } = await axios.get(`${MY_API_URL}/api/cafes/${id}`)
+    dispatch({
+      type: CAFE_DETAILS_SUCCESS,
+      payload: data,
+    })
+  }
+  catch (error) {
+    dispatch({
+      type: CAFE_DETAILS_FAIL,
+      payload: error.response && error.response.data.detail
+        ? error.response.data.detail
+        : error.message,
+    })
+  }
+}
