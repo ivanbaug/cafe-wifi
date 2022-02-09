@@ -1,26 +1,14 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.contrib.auth.models import User
-from .models import Cafe, Review
-from .cafes import cafes as dummy_cafes
-from rest_framework.decorators import api_view
+
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
-from .serializers import CafeSerializer
 
-# Create your views here.
-
-
-@api_view(["GET"])
-def get_routes(request):
-    routes = [
-        "/api/cafes/",
-        "/api/cafes/<id>/",
-        "/api/cafes/new/",
-        "/api/cafes/update/<id>/",
-        "/api/cafes/delete/<id>/",
-        "/api/cafes/<id>/reviews/",
-    ]
-    return Response(routes)
+from ..serializers import CafeSerializer
+from ..models import Cafe, Review
+from ..cafes import cafes as dummy_cafes
 
 
 @api_view(["GET"])
@@ -63,3 +51,4 @@ def load_dummies(request):
         )
 
     return Response(dummy_cafes)
+
