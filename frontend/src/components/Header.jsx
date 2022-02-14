@@ -50,9 +50,10 @@ const Header = () => {
                   <LinkContainer to='/new'>
                     <Nav.Link><i className='fas fa-plus-circle pe-1' />New site</Nav.Link>
                   </LinkContainer>
-
+                  <LinkContainer to='/profile'>
+                    <Nav.Link><i className='fas fa-user pe-1' />My profile</Nav.Link>
+                  </LinkContainer>
                   <Nav.Link onClick={logoutHandler}><i className='fas fa-sign-out-alt pe-1' />Logout</Nav.Link>
-
                 </Nav>
               </Navbar.Collapse>
             )
