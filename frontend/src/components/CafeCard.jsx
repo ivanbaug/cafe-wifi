@@ -9,21 +9,10 @@ import '../cardStyle.css'
 const CafeCard = ({ cafe, displayData }) => {
 
   const dispatch = useDispatch()
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
 
   const userLogin = useSelector(state => state.userLogin)
   const { userInfo } = userLogin
-
-  // const cafeDelete = useSelector(state => state.cafeDelete)
-  // const { loading: loadingDelete, error: errorDelete, success: successDelete } = cafeDelete
-
-
-  // useEffect(() => {
-  //   if (successDelete) {
-
-  //     navigate('/')
-  //   }
-  // }, [navigate, successDelete])
 
   const deleteHandler = (id) => {
     if (window.confirm('Are you sure you want to delete this cafe?')) {
@@ -116,7 +105,9 @@ const CafeCard = ({ cafe, displayData }) => {
               (userInfo && (userInfo.id === cafe.user)) &&
               <Row>
                 <ButtonGroup className='px-2' aria-label="Author options">
-                  <Button variant="info">Edit</Button>
+                  <LinkContainer to={`/cafe/${cafe.id}/edit`}>
+                    <Button variant="info">Edit</Button>
+                  </LinkContainer>
                   <Button
                     variant="secondary"
                     onClick={() => deleteHandler(cafe.id)} >

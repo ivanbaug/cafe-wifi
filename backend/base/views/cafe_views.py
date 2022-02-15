@@ -71,11 +71,11 @@ def load_dummies(request):
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def new_cafe(request):
-    user = request.user
-    username = User.objects.get(id=user).name
+
+    username = request.user.first_name
 
     new_cafe = Cafe.objects.create(
-        user=user,
+        user=request.user,
         name=f"{username}'s New Cafe ",
         map_url="https://www.google.com/maps",
         img_url="https://images.unsplash.com/photo-1445116572660-236099ec97a0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80",

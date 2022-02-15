@@ -19,10 +19,10 @@ function App() {
           <Routes>
             <Route path='/' exact element={<HomeScreen />} />
             <Route path='/cafe/:id' element={<CafeScreen />} />
+            <Route path='/cafe/:id/edit' element={<EditCafeScreen />} />
             <Route path='/login' element={<LoginScreen />} />
             <Route path='/register' element={<RegisterScreen />} />
             <Route path='/profile' element={<ProfileScreen />} />
-            <Route path='/editcf' element={<EditCafeScreen />} />
           </Routes>
         </Container>
       </main>
