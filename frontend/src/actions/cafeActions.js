@@ -128,3 +128,40 @@ export const createCafe = () => async (dispatch, getState) => {
     })
   }
 }
+
+export const updateCafe = (cafe) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: CAFE_UPDATE_REQUEST
+    })
+    const { userLogin: { userInfo } } = getState()
+    const config = {
+      headers: {
+        'Content-type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`
+      }
+    }
+    const { data } = await axios.put(
+      `${MY_API_URL}/api/cafes/update/${cafe.id}/`,
+      cafe,
+      config
+    )
+
+    dispatch({
+      type: CAFE_UPDATE_SUCCESS,
+      payload: data
+    })
+
+    dispatch({
+      type: CAFE_DETAILS_SUCCESS,
+      payload: data,
+    })
+
+  } catch (error) {
+    dispatch({
+      type: CAFE_UPDATE_FAIL,
+      payload: error.response && error.response.data.detail
+        ? error.response.data.detail : error.message,
+    })
+  }
+}

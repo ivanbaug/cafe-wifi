@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { listCafeDetails } from '../actions/cafeActions';
@@ -12,14 +12,13 @@ const CafeScreen = () => {
 
   const cafeDetails = useSelector(state => state.cafeDetails)
   const { error, loading, cafe } = cafeDetails
+
   const cafeDelete = useSelector(state => state.cafeDelete)
   const { loading: loadingDelete, error: errorDelete, success: successDelete } = cafeDelete
 
 
   const params = useParams()
   const navigate = useNavigate()
-  // const cafe = cafes.find(x => Number(x.id) === Number(params.id))
-  // const [cafe, setCafe] = useState({})
 
   useEffect(() => {
     if (successDelete) {

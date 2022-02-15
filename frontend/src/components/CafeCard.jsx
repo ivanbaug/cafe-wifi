@@ -1,6 +1,5 @@
-import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Card, Row, Col, Button, ButtonGroup } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap'
 import { deleteCafe } from '../actions/cafeActions';
@@ -9,7 +8,7 @@ import '../cardStyle.css'
 const CafeCard = ({ cafe, displayData }) => {
 
   const dispatch = useDispatch()
-  // const navigate = useNavigate()
+
 
   const userLogin = useSelector(state => state.userLogin)
   const { userInfo } = userLogin
@@ -116,8 +115,6 @@ const CafeCard = ({ cafe, displayData }) => {
                 </ButtonGroup>
               </Row>
             }
-
-
           </Card.Body>
         </Col>
       </Row>

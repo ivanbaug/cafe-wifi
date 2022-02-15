@@ -103,7 +103,6 @@ def update_cafe(request, pk):
             "Current user is not the author of this cafe.",
             status=status.HTTP_401_UNAUTHORIZED,
         )
-
     cafe.name = data["name"]
     cafe.map_url = data["map_url"]
     cafe.img_url = data["img_url"]
