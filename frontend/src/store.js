@@ -1,17 +1,22 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
+import { createStore, combineReducers, applyMiddleware } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
-import { cafeListReducer, cafeDetailsReducer } from './reducers/cafeReducers'
+import {
+  cafeListReducer,
+  cafeDetailsReducer,
+  cafeDeleteReducer,
+} from './reducers/cafeReducers'
 import {
   userLoginReducer,
   userRegisterReducer,
   userDetailsReducer,
-  userUpdateProfileReducer
+  userUpdateProfileReducer,
 } from './reducers/userReducers'
 
 const reducer = combineReducers({
   cafeList: cafeListReducer,
   cafeDetails: cafeDetailsReducer,
+  cafeDelete: cafeDeleteReducer,
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,
   userDetails: userDetailsReducer,

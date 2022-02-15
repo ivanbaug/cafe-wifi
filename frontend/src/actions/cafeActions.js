@@ -64,3 +64,36 @@ export const listCafeDetails = (id) => async (dispatch) => {
     })
   }
 }
+
+export const deleteCafe = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: CAFE_DELETE_REQUEST
+    })
+
+    const { userLogin: { userInfo } } = getState()
+    const config = {
+      headers: {
+        'Content-type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`
+      }
+    }
+
+    const { data } = await axios.delete(
+      `${MY_API_URL}/api/cafes/delete/${id}`,
+      config
+    )
+
+    dispatch({
+      type: CAFE_DELETE_SUCCESS,
+      payload: data
+    })
+
+  } catch (error) {
+    dispatch({
+      type: CAFE_DELETE_FAIL,
+      payload: error.response && error.response.data.detail
+        ? error.response.data.detail : error.message,
+    })
+  }
+}

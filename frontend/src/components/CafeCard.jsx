@@ -1,10 +1,36 @@
-import React from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom';
 import { Card, Row, Col, Button, ButtonGroup } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap'
+import { deleteCafe } from '../actions/cafeActions';
 import '../cardStyle.css'
 
 const CafeCard = ({ cafe, displayData }) => {
+
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const userLogin = useSelector(state => state.userLogin)
+  const { userInfo } = userLogin
+
+  // const cafeDelete = useSelector(state => state.cafeDelete)
+  // const { loading: loadingDelete, error: errorDelete, success: successDelete } = cafeDelete
+
+
+  // useEffect(() => {
+  //   if (successDelete) {
+
+  //     navigate('/')
+  //   }
+  // }, [navigate, successDelete])
+
+  const deleteHandler = (id) => {
+    if (window.confirm('Are you sure you want to delete this cafe?')) {
+      dispatch(deleteCafe(id))
+    }
+  }
+
   return (
     <Card className='mt-3'>
       <Row className='g-0'>
@@ -61,34 +87,46 @@ const CafeCard = ({ cafe, displayData }) => {
             {
               displayData === 'full'
                 ? (
-                  <Row>
-                    <Card.Text className='py-2'>
-                      <strong>Author Description:</strong>
-                      <br />
-                      {cafe.description}
-                    </Card.Text>
-                  </Row>
+                  <>
+                    <Row>
+                      <Card.Text className='py-2'>
+                        <strong>Author Description:</strong>
+                        <br />
+                        {cafe.description}
+                      </Card.Text>
+
+                    </Row>
+
+                    <Row className='py-2 px-2'>
+                      <Link className='d-grid gap-2 px-0' to={`/cafe/${cafe.id}`}>
+                        <Button variant="primary">Leave a review 📝</Button>
+                      </Link>
+                    </Row>
+                  </>
                 )
                 : (
                   <Row className='py-2 px-2'>
                     <Link className='d-grid gap-2 px-0' to={`/cafe/${cafe.id}`} >
-                      <Button variant="primary">More info</Button>
+                      <Button variant="primary">☕ More info / Review 📶</Button>
                     </Link>
                   </Row>
                 )
             }
+            {
+              (userInfo && (userInfo.id === cafe.user)) &&
+              <Row>
+                <ButtonGroup className='px-2' aria-label="Author options">
+                  <Button variant="info">Edit</Button>
+                  <Button
+                    variant="secondary"
+                    onClick={() => deleteHandler(cafe.id)} >
+                    Delete
+                  </Button>
+                </ButtonGroup>
+              </Row>
+            }
 
-            <Row>
-              <ButtonGroup className='px-2' aria-label="Author options">
-                <Button variant="info">Edit</Button>
-                <Button variant="secondary">Delete</Button>
-              </ButtonGroup>
-            </Row>
-            <Row className='py-2 px-2'>
-              <Link className='d-grid gap-2 px-0' to={`/cafe/${cafe.id}`} >
-                <Button variant="primary">Leave a review 📝</Button>
-              </Link>
-            </Row>
+
           </Card.Body>
         </Col>
       </Row>

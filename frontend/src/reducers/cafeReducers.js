@@ -8,21 +8,21 @@ import {
   CAFE_DELETE_REQUEST,
   CAFE_DELETE_SUCCESS,
   CAFE_DELETE_FAIL,
-  CAFE_CREATE_REQUEST,
-  CAFE_CREATE_SUCCESS,
-  CAFE_CREATE_FAIL,
-  CAFE_CREATE_RESET,
-  CAFE_UPDATE_REQUEST,
-  CAFE_UPDATE_SUCCESS,
-  CAFE_UPDATE_FAIL,
-  CAFE_UPDATE_RESET,
-  CAFE_CREATE_REVIEW_REQUEST,
-  CAFE_CREATE_REVIEW_SUCCESS,
-  CAFE_CREATE_REVIEW_FAIL,
-  CAFE_CREATE_REVIEW_RESET,
-  CAFE_TOP_REQUEST,
-  CAFE_TOP_SUCCESS,
-  CAFE_TOP_FAIL,
+  // CAFE_CREATE_REQUEST,
+  // CAFE_CREATE_SUCCESS,
+  // CAFE_CREATE_FAIL,
+  // CAFE_CREATE_RESET,
+  // CAFE_UPDATE_REQUEST,
+  // CAFE_UPDATE_SUCCESS,
+  // CAFE_UPDATE_FAIL,
+  // CAFE_UPDATE_RESET,
+  // CAFE_CREATE_REVIEW_REQUEST,
+  // CAFE_CREATE_REVIEW_SUCCESS,
+  // CAFE_CREATE_REVIEW_FAIL,
+  // CAFE_CREATE_REVIEW_RESET,
+  // CAFE_TOP_REQUEST,
+  // CAFE_TOP_SUCCESS,
+  // CAFE_TOP_FAIL,
 } from '../constants/cafeConstants'
 
 export const cafeListReducer = (state = { cafes: [] }, action) => {
@@ -50,6 +50,19 @@ export const cafeDetailsReducer = (state = { cafe: {} }, action) => {
     case CAFE_DETAILS_SUCCESS:
       return { loading: false, cafe: action.payload }
     case CAFE_DETAILS_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
+
+export const cafeDeleteReducer = (state = {}, action) => {
+  switch (action.type) {
+    case CAFE_DELETE_REQUEST:
+      return { loading: true }
+    case CAFE_DELETE_SUCCESS:
+      return { loading: false, success: true }
+    case CAFE_DELETE_FAIL:
       return { loading: false, error: action.payload }
     default:
       return state
