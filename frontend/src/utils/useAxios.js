@@ -5,12 +5,8 @@ import { MY_API_URL } from '../constants/apiConstant';
 import { REFRESH_TOKEN } from '../constants/userConstants';
 import { logout } from '../actions/userActions';
 import store from '../store';
-import { useDispatch, useSelector } from 'react-redux';
 
 const useAxios = () => {
-  // const dispatch = useDispatch()
-  // const userLogin = useSelector(state => state.userLogin)
-  // const { userToken } = userLogin
 
   const { userLogin: { userToken } } = store.getState()
 
@@ -22,30 +18,32 @@ const useAxios = () => {
     }
   })
 
+
   axiosInstance.interceptors.request.use(async req => {
 
     const user = jwt_decode(userToken.access)
     const isExpired = dayjs.unix(user.exp).diff(dayjs()) < 1;
-    console.log(`expired:${isExpired}`)
+    // console.log(`UseAxios: Expired:${isExpired}`)
     if (!isExpired) return req
     try {
-      console.log(`trying to get new token:${isExpired}`)
+      // console.log(`UseAxios:trying to get new token:${isExpired}`)
       const { data } = await axios.post(`${MY_API_URL}/api/users/token/refresh/`, {
         refresh: userToken.refresh
       });
 
       localStorage.setItem('authToken', JSON.stringify(data))
-      console.log(`new token acquired`)
+      // console.log(`UseAxios:new token acquired`)
       store.dispatch({
         type: REFRESH_TOKEN,
         payload: data
       })
-
+      // console.log(`useAxios: received data:${JSON.stringify(data, null, 4)}`)
       req.headers.Authorization = `Bearer ${data.access}`
+      // console.log(`useAxios: new request:${JSON.stringify(req, null, 4)}`)
       return req
     }
     catch (error) {
-      // Logout in case of expired token
+      // Logout in case of expired refresh token
       store.dispatch(logout())
     }
   })

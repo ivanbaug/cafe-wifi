@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect } from 'react'
-import { Form, Button, Row, Col } from 'react-bootstrap'
+import { Form, Button, } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import Loader from '../components/Loader'
 import Message from '../components/Message'
@@ -23,7 +23,7 @@ const ProfileScreen = () => {
   const navigate = useNavigate()
 
   const userDetails = useSelector(state => state.userDetails)
-  const { error, loading, user } = userDetails
+  const { error, loading: loadingDetails, user } = userDetails
 
   const userLogin = useSelector(state => state.userLogin)
   const { userInfo } = userLogin
@@ -31,17 +31,13 @@ const ProfileScreen = () => {
   const userUpdateProfile = useSelector(state => state.userUpdateProfile)
   const { success } = userUpdateProfile
 
-
+  // TODO: find all use effect and make sure i handle the loading correctly
   useEffect(() => {
-    console.log(`entered effect`)
     if (!userInfo) {
       navigate('/login')
     }
-    else {
-      // TODO: check user._id underlined in the following line, i believe it doesnt exists
+    else if (!loadingDetails) {
       if (!user || !user.name || success || userInfo.user_id !== user.id) {
-        console.log(`userInfo.user_id:${userInfo.user_id}`)
-        console.log(`user.id:${user?.id}`)
         dispatch({ type: USER_UPDATE_PROFILE_RESET })
         dispatch(getUserDetails('profile'))
         if (success) {
@@ -53,7 +49,7 @@ const ProfileScreen = () => {
         setEmail(user.email)
       }
     }
-  }, [navigate, userInfo, dispatch, user, success])
+  }, [navigate, userInfo, dispatch, user, success, loadingDetails])
 
 
   const submitHandler = (e) => {
@@ -63,8 +59,6 @@ const ProfileScreen = () => {
       setMessage('Passwords do not match')
     }
     else {
-      // dispatch(register(name, email, password))
-      // console.log('updating profile...')
       setMessage('')
       dispatch(updateUserProfile({
         'id': user._id,
@@ -80,7 +74,7 @@ const ProfileScreen = () => {
       <h1>Profile</h1>
       {message && <Message variant='warning'>{message}</Message>}
       {error && <Message variant='danger'>{error}</Message>}
-      {loading && <Loader />}
+      {loadingDetails && <Loader />}
       <Form onSubmit={submitHandler}>
         <Form.Group controlId='name' className='mb-3'>
           <Form.Label className='mb-0'>

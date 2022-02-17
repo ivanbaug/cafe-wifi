@@ -113,31 +113,18 @@ export const register = (name, email, password) => async (dispatch) => {
 
 
 export const getUserDetails = (id) => async (dispatch, getState) => {
-  const axiosAuthenticated = useAxios()
+  const axiosAuth = useAxios()
   try {
-    console.log(`trying to get user details`)
     dispatch({
       type: USER_DETAILS_REQUEST
     })
-    // // TODO: use userTokendata insead of user info
-    // const { userLogin: { userInfo } } = getState()
-    // const config = {
-    //   headers: {
-    //     'Content-type': 'application/json',
-    //     // TODO: use userTokendata insead of user info
-    //     Authorization: `Bearer ${userInfo.token}`
-    //   }
-    // }
 
-    const { data } = await axiosAuthenticated.get(
-      `${MY_API_URL}/api/users/${id}/`
-    )
+    const { data } = await axiosAuth.get(`${MY_API_URL}/api/users/${id}/`)
 
     dispatch({
       type: USER_DETAILS_SUCCESS,
       payload: data
     })
-    console.log(`data:${data}`)
 
   } catch (error) {
     dispatch({
@@ -147,25 +134,18 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
     })
   }
 }
+
 export const updateUserProfile = (user) => async (dispatch, getState) => {
+  const axiosAuth = useAxios()
   try {
     dispatch({
       type: USER_UPDATE_PROFILE_REQUEST
     })
-    // TODO: use userTokendata insead of user info
-    const { userLogin: { userInfo } } = getState()
-    const config = {
-      headers: {
-        'Content-type': 'application/json',
-        // TODO: use userTokendata insead of user info
-        Authorization: `Bearer ${userInfo.token}`
-      }
-    }
 
-    const { data } = await axios.put(
+    const { data } = await axiosAuth.put(
       `${MY_API_URL}/api/users/profile/update/`,
       user,
-      config
+      // config
     )
 
     dispatch({
@@ -190,23 +170,14 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
 }
 
 export const listUsers = () => async (dispatch, getState) => {
+  const axiosAuth = useAxios()
   try {
     dispatch({
       type: USER_LIST_REQUEST
     })
-    // TODO: use userTokendata insead of user info
-    const { userLogin: { userInfo } } = getState()
-    const config = {
-      headers: {
-        'Content-type': 'application/json',
-        // TODO: use userTokendata insead of user info
-        Authorization: `Bearer ${userInfo.token}`
-      }
-    }
 
-    const { data } = await axios.get(
+    const { data } = await axiosAuth.get(
       `${MY_API_URL}/api/users/`,
-      config
     )
 
     dispatch({
@@ -225,30 +196,20 @@ export const listUsers = () => async (dispatch, getState) => {
 }
 
 export const deleteUser = (id) => async (dispatch, getState) => {
+  const axiosAuth = useAxios()
   try {
     dispatch({
       type: USER_DELETE_REQUEST
     })
-    // TODO: use userTokendata insead of user info
-    const { userLogin: { userInfo } } = getState()
-    const config = {
-      headers: {
-        'Content-type': 'application/json',
-        // TODO: use userTokendata insead of user info
-        Authorization: `Bearer ${userInfo.token}`
-      }
-    }
 
-    const { data } = await axios.delete(
+    const { data } = await axiosAuth.delete(
       `${MY_API_URL}/api/users/delete/${id}`,
-      config
     )
 
     dispatch({
       type: USER_DELETE_SUCCESS,
       payload: data
     })
-
 
   } catch (error) {
     dispatch({
@@ -260,29 +221,20 @@ export const deleteUser = (id) => async (dispatch, getState) => {
 }
 
 export const updateUser = (user) => async (dispatch, getState) => {
+  const axiosAuth = useAxios()
   try {
     dispatch({
       type: USER_UPDATE_REQUEST
     })
-    // TODO: use userTokendata insead of user info
-    const { userLogin: { userInfo } } = getState()
-    const config = {
-      headers: {
-        // TODO: use userTokendata insead of user info
-        'Content-type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`
-      }
-    }
 
-    const { data } = await axios.put(
+
+    const { data } = await axiosAuth.put(
       `${MY_API_URL}/api/users/update/${user._id}/`,
       user,
-      config
     )
 
     dispatch({
       type: USER_UPDATE_SUCCESS,
-      // payload: data
     })
 
     dispatch({
@@ -298,8 +250,4 @@ export const updateUser = (user) => async (dispatch, getState) => {
         ? error.response.data.detail : error.message,
     })
   }
-}
-
-export const refreshToken = () => (dispatch, getState) => {
-
 }

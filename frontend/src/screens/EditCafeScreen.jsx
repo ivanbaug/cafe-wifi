@@ -64,11 +64,9 @@ const EditCafeScreen = () => {
     }
     else {
       if (!cafe.name || Number(cafe.id) !== Number(params.id)) {
-        // console.log('getting cafe info...')
         dispatch(listCafeDetails(params.id))
       }
       else {
-        // console.log('setting cafe data')
         setName(cafe.name)
         setMapUrl(cafe.map_url)
         setImgUrl(cafe.img_url)
@@ -94,7 +92,7 @@ const EditCafeScreen = () => {
           ? <Loader />
           : error
             ? <Message variant='danger' >{error}</Message>
-            : userInfo && ((userInfo.id === cafe.user) || userInfo.is_admin)
+            : userInfo && ((userInfo.user_id === cafe.user) || userInfo.is_admin)
               ? (
                 <FormContainer>
                   <h2>Cafe Info</h2>

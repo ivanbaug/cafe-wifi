@@ -67,23 +67,14 @@ export const listCafeDetails = (id) => async (dispatch) => {
 }
 
 export const deleteCafe = (id) => async (dispatch, getState) => {
+  const axiosAuth = useAxios()
   try {
     dispatch({
       type: CAFE_DELETE_REQUEST
     })
-    // TODO: use userTokendata insead of user info
-    const { userLogin: { userInfo } } = getState()
-    const config = {
-      headers: {
-        'Content-type': 'application/json',
-        // TODO: use userTokendata insead of user info
-        Authorization: `Bearer ${userInfo.token}`
-      }
-    }
 
-    const { data } = await axios.delete(
-      `${MY_API_URL}/api/cafes/delete/${id}`,
-      config
+    const { data } = await axiosAuth.delete(
+      `${MY_API_URL}/api/cafes/delete/${id}/`,
     )
 
     dispatch({
@@ -101,24 +92,17 @@ export const deleteCafe = (id) => async (dispatch, getState) => {
 }
 
 export const createCafe = () => async (dispatch, getState) => {
-  const axiosAuthenticated = useAxios()
+  const axiosAuth = useAxios()
   try {
     dispatch({
       type: CAFE_CREATE_REQUEST
     })
-    // TODO: use userTokendata insead of user info
-    // const { userLogin: { userInfo } } = getState()
-    // const config = {
-    //   headers: {
-    //     'Content-type': 'application/json',
-    //     // TODO: use userTokendata insead of user info
-    //     Authorization: `Bearer ${userInfo.token}`
-    //   }
-    // }
-    const { data } = await axiosAuthenticated.post(
+
+    const { data } = await axiosAuth.post(
       `${MY_API_URL}/api/cafes/new/`,
       {},
     )
+
     dispatch({
       type: CAFE_CREATE_SUCCESS,
       payload: data
@@ -134,23 +118,24 @@ export const createCafe = () => async (dispatch, getState) => {
 }
 
 export const updateCafe = (cafe) => async (dispatch, getState) => {
+  const axiosAuth = useAxios()
   try {
     dispatch({
       type: CAFE_UPDATE_REQUEST
     })
-    // TODO: use userTokendata insead of user info
-    const { userLogin: { userInfo } } = getState()
-    const config = {
-      headers: {
-        'Content-type': 'application/json',
-        // TODO: use userTokendata insead of user info
-        Authorization: `Bearer ${userInfo.token}`
-      }
-    }
-    const { data } = await axios.put(
+    // // TODO: use userTokendata insead of user info
+    // const { userLogin: { userInfo } } = getState()
+    // const config = {
+    //   headers: {
+    //     'Content-type': 'application/json',
+    //     // TODO: use userTokendata insead of user info
+    //     Authorization: `Bearer ${userInfo.token}`
+    //   }
+    // }
+    const { data } = await axiosAuth.put(
       `${MY_API_URL}/api/cafes/update/${cafe.id}/`,
       cafe,
-      config
+      // config
     )
 
     dispatch({
