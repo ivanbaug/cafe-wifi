@@ -14,6 +14,7 @@ import {
   userDetailsReducer,
   userUpdateProfileReducer,
 } from './reducers/userReducers'
+import jwt_decode from "jwt-decode"
 
 const reducer = combineReducers({
   cafeList: cafeListReducer,
@@ -27,11 +28,18 @@ const reducer = combineReducers({
   userUpdateProfile: userUpdateProfileReducer,
 })
 
-const userInfoFromStorage = localStorage.getItem('userInfo') ?
-  JSON.parse(localStorage.getItem('userInfo')) : null
+
+const userTokensFromStorage = localStorage.getItem('authToken') ?
+  JSON.parse(localStorage.getItem('authToken')) : null
+
+const userInfoFromToken = userTokensFromStorage ?
+  jwt_decode(userTokensFromStorage.access) : null
 
 const initialState = {
-  userLogin: { userInfo: userInfoFromStorage }
+  userLogin: {
+    userToken: userTokensFromStorage,
+    userInfo: userInfoFromToken,
+  }
 }
 
 const middleware = [thunk]

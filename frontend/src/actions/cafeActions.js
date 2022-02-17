@@ -26,6 +26,7 @@ import {
   CAFE_TOP_SUCCESS,
   CAFE_TOP_FAIL,
 } from '../constants/cafeConstants'
+import useAxios from '../utils/useAxios';
 
 export const listCafes = (keyword = '') => async (dispatch) => {
   try {
@@ -70,11 +71,12 @@ export const deleteCafe = (id) => async (dispatch, getState) => {
     dispatch({
       type: CAFE_DELETE_REQUEST
     })
-
+    // TODO: use userTokendata insead of user info
     const { userLogin: { userInfo } } = getState()
     const config = {
       headers: {
         'Content-type': 'application/json',
+        // TODO: use userTokendata insead of user info
         Authorization: `Bearer ${userInfo.token}`
       }
     }
@@ -99,21 +101,23 @@ export const deleteCafe = (id) => async (dispatch, getState) => {
 }
 
 export const createCafe = () => async (dispatch, getState) => {
+  const axiosAuthenticated = useAxios()
   try {
     dispatch({
       type: CAFE_CREATE_REQUEST
     })
-    const { userLogin: { userInfo } } = getState()
-    const config = {
-      headers: {
-        'Content-type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`
-      }
-    }
-    const { data } = await axios.post(
+    // TODO: use userTokendata insead of user info
+    // const { userLogin: { userInfo } } = getState()
+    // const config = {
+    //   headers: {
+    //     'Content-type': 'application/json',
+    //     // TODO: use userTokendata insead of user info
+    //     Authorization: `Bearer ${userInfo.token}`
+    //   }
+    // }
+    const { data } = await axiosAuthenticated.post(
       `${MY_API_URL}/api/cafes/new/`,
       {},
-      config
     )
     dispatch({
       type: CAFE_CREATE_SUCCESS,
@@ -134,10 +138,12 @@ export const updateCafe = (cafe) => async (dispatch, getState) => {
     dispatch({
       type: CAFE_UPDATE_REQUEST
     })
+    // TODO: use userTokendata insead of user info
     const { userLogin: { userInfo } } = getState()
     const config = {
       headers: {
         'Content-type': 'application/json',
+        // TODO: use userTokendata insead of user info
         Authorization: `Bearer ${userInfo.token}`
       }
     }

@@ -33,11 +33,15 @@ const ProfileScreen = () => {
 
 
   useEffect(() => {
+    console.log(`entered effect`)
     if (!userInfo) {
       navigate('/login')
     }
     else {
-      if (!user || !user.name || success || userInfo._id !== user._id) {
+      // TODO: check user._id underlined in the following line, i believe it doesnt exists
+      if (!user || !user.name || success || userInfo.user_id !== user.id) {
+        console.log(`userInfo.user_id:${userInfo.user_id}`)
+        console.log(`user.id:${user?.id}`)
         dispatch({ type: USER_UPDATE_PROFILE_RESET })
         dispatch(getUserDetails('profile'))
         if (success) {

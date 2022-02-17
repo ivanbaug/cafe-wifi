@@ -7,6 +7,7 @@ import Loader from '../components/Loader'
 import Message from '../components/Message'
 import { register } from '../actions/userActions'
 import FormContainer from '../components/FormContainer'
+import { USER_REGISTER_RESET } from '../constants/userConstants'
 
 
 const RegisterScreen = () => {
@@ -30,8 +31,9 @@ const RegisterScreen = () => {
   useEffect(() => {
     if (userInfo) {
       navigate(redirect)
+      dispatch({ type: USER_REGISTER_RESET })
     }
-  }, [navigate, userInfo, redirect])
+  }, [navigate, userInfo, redirect, dispatch])
 
   const submitHandler = (e) => {
     e.preventDefault()

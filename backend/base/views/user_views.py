@@ -7,22 +7,43 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from ..serializers import UserSerializer, UserSerializerWithToken
+from rest_framework_simplejwt.tokens import RefreshToken
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-    def validate(self, attrs):
-        data = super().validate(attrs)
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
 
-        serializer = UserSerializerWithToken(self.user).data
+        # Custom claims
+        token["username"] = user.username
+        token["email"] = user.email
+        token["name"] = user.first_name
+        token["is_admin"] = user.is_staff
 
-        for k, v in serializer.items():
-            data[k] = v
+        return token
 
-        return data
+    # def validate(self, attrs):
+    #     data = super().validate(attrs)
+
+    #     serializer = UserSerializerWithToken(self.user).data
+
+    #     for k, v in serializer.items():
+    #         data[k] = v
+
+    #     return data
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
+
+
+def get_tokens_for_user(user):
+    refresh = MyTokenObtainPairSerializer.get_token(user=user)
+    return {
+        "refresh": str(refresh),
+        "access": str(refresh.access_token),
+    }
 
 
 @api_view(["GET"])
@@ -36,6 +57,7 @@ def get_user_profile(request):
 @api_view(["POST"])
 def register_user(request):
     data = request.data
+
     try:
         user = User.objects.create(
             first_name=data["name"],
@@ -43,8 +65,9 @@ def register_user(request):
             email=data["email"],
             password=make_password(data["password"]),
         )
-        serializer = UserSerializerWithToken(user, many=False)
-        return Response(serializer.data)
+
+        tokens = get_tokens_for_user(user)
+        return Response(tokens)
     except:
         message = {"detail": "User with this email already exists"}
         return Response(message, status=status.HTTP_400_BAD_REQUEST)
@@ -53,23 +76,23 @@ def register_user(request):
 @api_view(["PUT"])
 @permission_classes([IsAuthenticated])
 def update_user_profile(request):
-    # TODO: I feel its somewhat unsafe to only require authentication maybe
-    #  we should verify that the user you're about to change is the same
-    #  as the token owner.
     user = request.user
-    serializer = UserSerializerWithToken(user, many=False)
-
     data = request.data
 
-    user.first_name = data["name"]
-    user.username = data["email"]
-    user.email = data["email"]
+    try:
+        user.username = data["email"]
+        user.first_name = data["name"]
+        user.email = data["email"]
 
-    if data["password"] != "":
-        user.password = make_password(data["password"])
-    user.save()
+        if data["password"] != "":
+            user.password = make_password(data["password"])
+        user.save()
 
-    return Response(serializer.data)
+        tokens = get_tokens_for_user(user)
+        return Response(tokens)
+    except:
+        message = {"detail": "User with this email already exists"}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(["GET"])
@@ -91,7 +114,6 @@ def get_user_by_id(request, pk):
 @api_view(["PUT"])
 @permission_classes([IsAdminUser])
 def update_user(request, pk):
-
     user = User.objects.get(id=pk)
     data = request.data
 

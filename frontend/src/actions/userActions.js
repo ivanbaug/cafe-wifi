@@ -28,7 +28,11 @@ import {
   USER_UPDATE_SUCCESS,
   USER_UPDATE_FAIL,
   USER_UPDATE_RESET,
+  REFRESH_TOKEN,
 } from "../constants/userConstants";
+import useAxios from '../utils/useAxios';
+
+
 
 export const login = (email, password) => async (dispatch) => {
   try {
@@ -47,7 +51,7 @@ export const login = (email, password) => async (dispatch) => {
       type: USER_LOGIN_SUCCESS,
       payload: data,
     })
-    localStorage.setItem('userInfo', JSON.stringify(data))
+    localStorage.setItem('authToken', JSON.stringify(data))
   }
   catch (error) {
     dispatch({
@@ -60,7 +64,7 @@ export const login = (email, password) => async (dispatch) => {
 }
 
 export const logout = () => (dispatch) => {
-  localStorage.removeItem('userInfo')
+  localStorage.removeItem('authToken')
   dispatch({ type: USER_LOGOUT })
   dispatch({ type: USER_DETAILS_RESET })
   // dispatch({ type: ORDER_LIST_MY_RESET })
@@ -90,11 +94,13 @@ export const register = (name, email, password) => async (dispatch) => {
       type: USER_REGISTER_SUCCESS,
       payload: data
     })
+
     dispatch({
       type: USER_LOGIN_SUCCESS,
       payload: data
     })
-    localStorage.setItem('userInfo', JSON.stringify(data))
+
+    localStorage.setItem('authToken', JSON.stringify(data))
 
   } catch (error) {
     dispatch({
@@ -107,29 +113,31 @@ export const register = (name, email, password) => async (dispatch) => {
 
 
 export const getUserDetails = (id) => async (dispatch, getState) => {
+  const axiosAuthenticated = useAxios()
   try {
+    console.log(`trying to get user details`)
     dispatch({
       type: USER_DETAILS_REQUEST
     })
+    // // TODO: use userTokendata insead of user info
+    // const { userLogin: { userInfo } } = getState()
+    // const config = {
+    //   headers: {
+    //     'Content-type': 'application/json',
+    //     // TODO: use userTokendata insead of user info
+    //     Authorization: `Bearer ${userInfo.token}`
+    //   }
+    // }
 
-    const { userLogin: { userInfo } } = getState()
-    const config = {
-      headers: {
-        'Content-type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`
-      }
-    }
-
-    const { data } = await axios.get(
-      `${MY_API_URL}/api/users/${id}/`,
-      config
+    const { data } = await axiosAuthenticated.get(
+      `${MY_API_URL}/api/users/${id}/`
     )
 
     dispatch({
       type: USER_DETAILS_SUCCESS,
       payload: data
     })
-
+    console.log(`data:${data}`)
 
   } catch (error) {
     dispatch({
@@ -144,11 +152,12 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
     dispatch({
       type: USER_UPDATE_PROFILE_REQUEST
     })
-
+    // TODO: use userTokendata insead of user info
     const { userLogin: { userInfo } } = getState()
     const config = {
       headers: {
         'Content-type': 'application/json',
+        // TODO: use userTokendata insead of user info
         Authorization: `Bearer ${userInfo.token}`
       }
     }
@@ -169,7 +178,7 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
       payload: data
     })
 
-    localStorage.setItem('userInfo', JSON.stringify(data))
+    localStorage.setItem('authToken', JSON.stringify(data))
 
   } catch (error) {
     dispatch({
@@ -185,11 +194,12 @@ export const listUsers = () => async (dispatch, getState) => {
     dispatch({
       type: USER_LIST_REQUEST
     })
-
+    // TODO: use userTokendata insead of user info
     const { userLogin: { userInfo } } = getState()
     const config = {
       headers: {
         'Content-type': 'application/json',
+        // TODO: use userTokendata insead of user info
         Authorization: `Bearer ${userInfo.token}`
       }
     }
@@ -219,11 +229,12 @@ export const deleteUser = (id) => async (dispatch, getState) => {
     dispatch({
       type: USER_DELETE_REQUEST
     })
-
+    // TODO: use userTokendata insead of user info
     const { userLogin: { userInfo } } = getState()
     const config = {
       headers: {
         'Content-type': 'application/json',
+        // TODO: use userTokendata insead of user info
         Authorization: `Bearer ${userInfo.token}`
       }
     }
@@ -253,10 +264,11 @@ export const updateUser = (user) => async (dispatch, getState) => {
     dispatch({
       type: USER_UPDATE_REQUEST
     })
-
+    // TODO: use userTokendata insead of user info
     const { userLogin: { userInfo } } = getState()
     const config = {
       headers: {
+        // TODO: use userTokendata insead of user info
         'Content-type': 'application/json',
         Authorization: `Bearer ${userInfo.token}`
       }
@@ -286,4 +298,8 @@ export const updateUser = (user) => async (dispatch, getState) => {
         ? error.response.data.detail : error.message,
     })
   }
+}
+
+export const refreshToken = () => (dispatch, getState) => {
+
 }
