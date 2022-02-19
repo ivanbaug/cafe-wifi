@@ -6,7 +6,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
-from ..serializers import CafeSerializer
+from ..serializers import CafeSerializer, ReviewSerializer
 from ..models import Cafe, Review
 from ..cafes import cafes as dummy_cafes
 
@@ -14,6 +14,18 @@ from ..cafes import cafes as dummy_cafes
 @api_view(["GET"])
 def get_cafes(request):
     cafes = Cafe.objects.all()
+    serializer = CafeSerializer(cafes, many=True)
+    return Response(
+        {
+            "cafes": serializer.data,
+        }
+    )
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_own_cafes(request):
+    cafes = Cafe.objects.filter(user=request.user)
     serializer = CafeSerializer(cafes, many=True)
     return Response(
         {
@@ -120,3 +132,43 @@ def update_cafe(request, pk):
     serializer = CafeSerializer(cafe, many=False)
 
     return Response(serializer.data)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def create_cafe_review(request, pk):
+    user = request.user
+    cafe = Cafe.objects.get(id=pk)
+    data = request.data
+    # 1 - review already exists
+    already_exists = cafe.review_set.filter(user=user).exists()
+    if already_exists:
+        content = {"detail": "Cafe already reviewed"}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+    # 2 - no rating or 0
+    elif data["rating"] == 0:
+        content = {"detail": "Please select a rating"}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+    # 3 - create review
+    else:
+        review = Review.objects.create(
+            user=user,
+            cafe=cafe,
+            name=user.first_name,
+            title=data["title"],
+            rating=data["rating"],
+            comment=data["comment"],
+        )
+        reviews = cafe.review_set.all()
+        cafe.num_reviews = len(reviews)
+
+        total = 0
+
+        for r in reviews:
+            total += r.rating
+        cafe.rating = total / len(reviews)
+        cafe.save()
+
+        return Response("Review added")

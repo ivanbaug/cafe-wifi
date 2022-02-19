@@ -25,6 +25,8 @@ class Cafe(models.Model):
     date_added = models.DateTimeField(auto_now_add=True, editable=False)
     date_edited = models.DateTimeField(auto_now_add=True)
     description = models.TextField(null=True, blank=True)
+    num_reviews = models.IntegerField(null=True, blank=True, default=0)
+    rating = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
 
     def __str__(self) -> str:
         return self.name
@@ -33,6 +35,7 @@ class Cafe(models.Model):
 class Review(models.Model):
     cafe = models.ForeignKey(Cafe, on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    name = models.CharField(max_length=200, null=True, blank=True)
     title = models.CharField(max_length=200, null=True, blank=True)
     rating = models.IntegerField(null=True, blank=True, default=1)
     comment = models.TextField(null=True, blank=True)
