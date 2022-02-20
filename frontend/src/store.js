@@ -7,6 +7,7 @@ import {
   cafeDeleteReducer,
   cafeCreateReducer,
   cafeUpdateReducer,
+  cafeCreateReviewReducer,
 } from './reducers/cafeReducers'
 import {
   userLoginReducer,
@@ -22,6 +23,7 @@ const reducer = combineReducers({
   cafeDelete: cafeDeleteReducer,
   cafeCreate: cafeCreateReducer,
   cafeUpdate: cafeUpdateReducer,
+  cafeCreateReview: cafeCreateReviewReducer,
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,
   userDetails: userDetailsReducer,

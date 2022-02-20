@@ -50,7 +50,7 @@ export const listCafes = (keyword = '') => async (dispatch) => {
 export const listCafeDetails = (id) => async (dispatch) => {
   try {
     dispatch({ type: CAFE_DETAILS_REQUEST })
-    const { data } = await axios.get(`${MY_API_URL}/api/cafes/${id}`)
+    const { data } = await axios.get(`${MY_API_URL}/api/cafes/${id}/`)
     dispatch({
       type: CAFE_DETAILS_SUCCESS,
       payload: data,
@@ -123,19 +123,10 @@ export const updateCafe = (cafe) => async (dispatch, getState) => {
     dispatch({
       type: CAFE_UPDATE_REQUEST
     })
-    // // TODO: use userTokendata insead of user info
-    // const { userLogin: { userInfo } } = getState()
-    // const config = {
-    //   headers: {
-    //     'Content-type': 'application/json',
-    //     // TODO: use userTokendata insead of user info
-    //     Authorization: `Bearer ${userInfo.token}`
-    //   }
-    // }
+
     const { data } = await axiosAuth.put(
       `${MY_API_URL}/api/cafes/update/${cafe.id}/`,
       cafe,
-      // config
     )
 
     dispatch({
@@ -151,6 +142,52 @@ export const updateCafe = (cafe) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: CAFE_UPDATE_FAIL,
+      payload: error.response && error.response.data.detail
+        ? error.response.data.detail : error.message,
+    })
+  }
+}
+
+export const listMyCafes = (keyword = '') => async (dispatch) => {
+  const axiosAuth = useAxios()
+  try {
+    dispatch({ type: CAFE_LIST_REQUEST })
+    const { data } = await axiosAuth.get(`${MY_API_URL}/api/cafes/my_cafes/`)
+    dispatch({
+      type: CAFE_LIST_SUCCESS,
+      payload: data,
+    })
+  }
+  catch (error) {
+    dispatch({
+      type: CAFE_LIST_FAIL,
+      payload: error.response && error.response.data.detail
+        ? error.response.data.detail
+        : error.message,
+    })
+  }
+}
+
+export const createCafeReview = (cafe_id, review) => async (dispatch) => {
+  const axiosAuth = useAxios()
+  try {
+    dispatch({
+      type: CAFE_CREATE_REVIEW_REQUEST
+    })
+
+    const { data } = await axiosAuth.post(
+      `${MY_API_URL}/api/cafes/${cafe_id}/review/`,
+      review,
+    )
+
+    dispatch({
+      type: CAFE_CREATE_REVIEW_SUCCESS,
+      payload: data
+    })
+
+  } catch (error) {
+    dispatch({
+      type: CAFE_CREATE_REVIEW_FAIL,
       payload: error.response && error.response.data.detail
         ? error.response.data.detail : error.message,
     })

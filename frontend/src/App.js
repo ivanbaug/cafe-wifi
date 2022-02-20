@@ -8,6 +8,7 @@ import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import EditCafeScreen from './screens/EditCafeScreen';
+import MyCafesScreen from './screens/MyCafesScreen';
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Container className='cont-width'>
           <Routes>
             <Route path='/' exact element={<HomeScreen />} />
+            <Route path='/my_cafes' element={<MyCafesScreen />} />
             <Route path='/cafe/:id' element={<CafeScreen />} />
             <Route path='/cafe/:id/edit' element={<EditCafeScreen />} />
             <Route path='/login' element={<LoginScreen />} />

@@ -9,6 +9,7 @@ urlpatterns = [
     path("my_cafes/", views.get_own_cafes, name="my-cafes"),
     path("load_dummies/", views.load_dummies, name="maketests"),
     path("<str:pk>/", views.get_cafe, name="cafe"),
+    path("<str:pk>/review/", views.create_cafe_review, name="create-review"),
     path("update/<str:pk>/", views.update_cafe, name="cafe-update"),
     path("delete/<str:pk>/", views.delete_cafe, name="cafe-delete"),
 ]

@@ -61,7 +61,11 @@ const CafeCard = ({ cafe, displayData }) => {
                 <strong>Can take calls?</strong> {cafe.can_take_calls ? 'Yes' : 'No'}
               </Col>
               <Col>
-                <strong>User Rating:</strong> ###
+                <strong>User Ratings:</strong>
+                {cafe.rating
+                  ? <span>{cafe.rating} of 5</span>
+                  : <span> Not rated yet </span>
+                }
               </Col>
             </Row>
             <Row>
@@ -69,7 +73,10 @@ const CafeCard = ({ cafe, displayData }) => {
                 <strong>Coffee price:</strong> {cafe.coffee_price}
               </Col>
               <Col>
-                Reviewed ### times
+                {
+                  cafe.num_reviews > 0 &&
+                  <span>Reviewed {cafe.num_reviews} times.</span>
+                }
               </Col>
             </Row>
             {
@@ -77,18 +84,14 @@ const CafeCard = ({ cafe, displayData }) => {
                 ? (
                   <>
                     <Row>
-                      <Card.Text className='py-2'>
-                        <strong>Author Description:</strong>
+                      <Card.Text className='py-3'>
+                        <strong >📝 Author Description:</strong>
                         <br />
-                        {cafe.description}
+                        <span>{cafe.description}</span>
                       </Card.Text>
-
-                    </Row>
-
-                    <Row className='py-2 px-2'>
-                      <Link className='d-grid gap-2 px-0' to={`/cafe/${cafe.id}`}>
-                        <Button variant="primary">Leave a review 📝</Button>
-                      </Link>
+                      <Card.Text className='text-center'>
+                        ☕🍪💻
+                      </Card.Text>
                     </Row>
                   </>
                 )

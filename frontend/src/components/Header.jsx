@@ -66,7 +66,7 @@ const Header = () => {
             ? (
               <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="ms-auto">
-                  <LinkContainer to='/mysites'>
+                  <LinkContainer to='/my_cafes'>
                     <Nav.Link><i className='fas fa-mug-hot pe-1' />My sites</Nav.Link>
                   </LinkContainer>
                   <Nav.Link onClick={newCafeHandler}><i className='fas fa-plus-circle pe-1' />New site</Nav.Link>

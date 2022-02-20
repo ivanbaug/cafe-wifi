@@ -17,10 +17,10 @@ import {
   CAFE_UPDATE_SUCCESS,
   CAFE_UPDATE_FAIL,
   CAFE_UPDATE_RESET,
-  // CAFE_CREATE_REVIEW_REQUEST,
-  // CAFE_CREATE_REVIEW_SUCCESS,
-  // CAFE_CREATE_REVIEW_FAIL,
-  // CAFE_CREATE_REVIEW_RESET,
+  CAFE_CREATE_REVIEW_REQUEST,
+  CAFE_CREATE_REVIEW_SUCCESS,
+  CAFE_CREATE_REVIEW_FAIL,
+  CAFE_CREATE_REVIEW_RESET,
   // CAFE_TOP_REQUEST,
   // CAFE_TOP_SUCCESS,
   // CAFE_TOP_FAIL,
@@ -97,6 +97,22 @@ export const cafeUpdateReducer = (state = { cafe: {} }, action) => {
       return { loading: false, error: action.payload }
     case CAFE_UPDATE_RESET:
       return { cafe: {} }
+    default:
+      return state
+  }
+}
+
+
+export const cafeCreateReviewReducer = (state = {}, action) => {
+  switch (action.type) {
+    case CAFE_CREATE_REVIEW_REQUEST:
+      return { loading: true }
+    case CAFE_CREATE_REVIEW_SUCCESS:
+      return { loading: false, success: true }
+    case CAFE_CREATE_REVIEW_FAIL:
+      return { loading: false, error: action.payload }
+    case CAFE_CREATE_REVIEW_RESET:
+      return {}
     default:
       return state
   }
