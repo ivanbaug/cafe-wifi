@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Button, Card, Container, Figure, Form } from 'react-bootstrap';
+import { Button, Card, Container, Figure, Form, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { createCafeReview, listCafeDetails } from '../actions/cafeActions';
+import { createCafeReview, deleteCafeReview, listCafeDetails } from '../actions/cafeActions';
 import CafeCard from '../components/CafeCard';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-import { CAFE_CREATE_REVIEW_RESET, CAFE_DELETE_RESET } from '../constants/cafeConstants';
+import { CAFE_CREATE_REVIEW_RESET, CAFE_DELETE_RESET, CAFE_DELETE_REVIEW_RESET } from '../constants/cafeConstants';
 
 
 const CafeScreen = () => {
@@ -33,6 +33,9 @@ const CafeScreen = () => {
   const cafeReviewCreate = useSelector(state => state.cafeCreateReview)
   const { error: errorCafeReview, loading: loadingCafeReview, success: successCafeReview } = cafeReviewCreate
 
+  const cafeDeleteReview = useSelector(state => state.cafeDeleteReview)
+  const { error: errorReviewDelete, success: successReviewDelete } = cafeDeleteReview
+
 
   const submitHandler = (e) => {
     e.preventDefault()
@@ -44,6 +47,12 @@ const CafeScreen = () => {
         comment: reviewText,
         rating: reviewValue,
       }))
+  }
+
+  const deleteReviewHandler = (id) => {
+    if (window.confirm('Are you sure you want to delete this review?')) {
+      dispatch(deleteCafeReview(id))
+    }
   }
 
   useEffect(() => {
@@ -61,9 +70,12 @@ const CafeScreen = () => {
       setReviewText('')
       dispatch({ type: CAFE_CREATE_REVIEW_RESET })
     }
+    if (successReviewDelete) {
+      dispatch({ type: CAFE_DELETE_REVIEW_RESET })
+    }
 
     dispatch(listCafeDetails(params.id))
-  }, [params, dispatch, errorDelete, successDelete, navigate, successCafeReview])
+  }, [params, dispatch, errorDelete, successDelete, navigate, successCafeReview, successReviewDelete])
 
   return (
     <>
@@ -78,7 +90,8 @@ const CafeScreen = () => {
       }
 
       <h4>Leave a review</h4>
-      {/* TODO: already written a review logic */}
+      {loadingCafeReview && <Loader />}
+      {errorCafeReview && <Message variant='danger' >{errorCafeReview}, you can delete your previous review to submit a new one.</Message>}
       {
         userInfo
           ?
@@ -141,7 +154,8 @@ const CafeScreen = () => {
           :
           <Card>
             <Card.Body>
-              Please <Link to={'/login?redirect=' + location.pathname}>login 🙋🏻‍♂️</Link> or <Link to={'/register?redirect=' + location.pathname}>register✍🏻</Link> to leave a review.
+              You can&nbsp;
+              <Link to={'/login?redirect=' + location.pathname}><Button className='btn-sm'>Login 🙋🏻‍♂️</Button></Link> or <Link to={'/register?redirect=' + location.pathname}><Button className='btn-sm'>Register✍🏻</Button></Link> to leave a review.
             </Card.Body>
           </Card>
       }
@@ -160,11 +174,30 @@ const CafeScreen = () => {
               {
                 cafe.reviews &&
                 cafe.reviews.map((review) => (
-                  <Card key={review.id}>
+                  <Card className='mb-3' key={review.id}>
                     <Card.Body>
-                      <Card.Title>{review.title} (Rating: {review.rating})</Card.Title>
-                      {review.comment}
-                      <Figure.Caption>-by {review.name} on {(new Date(review.date_edited)).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</Figure.Caption>
+                      <Row>
+                        <Col md={2}>
+                          <Card.Text className='text-muted text-wrap'>
+                            <span className='fs-1 fw-bold'>{Number(review.rating).toFixed(1)}</span> out of 5.0
+                          </Card.Text>
+                        </Col>
+                        <Col md={10}>
+                          <Card.Title>
+                            {review.title}
+                            {
+                              userInfo && userInfo.user_id && (userInfo.user_id === review.user || userInfo.is_admin) &&
+                              <Button
+                                variant='link'
+                                className='fs-6 btn-sm'
+                                onClick={() => deleteReviewHandler(review.id)}
+                              >(✘ Delete review)</Button>
+                            }
+                          </Card.Title>
+                          {review.comment}
+                          <Figure.Caption>-by {review.name} on {(new Date(review.date_edited)).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</Figure.Caption>
+                        </Col>
+                      </Row>
                     </Card.Body>
                   </Card>
                 ))}

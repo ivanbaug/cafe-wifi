@@ -12,4 +12,5 @@ urlpatterns = [
     path("<str:pk>/review/", views.create_cafe_review, name="create-review"),
     path("update/<str:pk>/", views.update_cafe, name="cafe-update"),
     path("delete/<str:pk>/", views.delete_cafe, name="cafe-delete"),
+    path("delete_review/<str:pk>/", views.delete_review, name="review-delete"),
 ]

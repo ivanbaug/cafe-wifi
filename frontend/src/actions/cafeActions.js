@@ -22,6 +22,9 @@ import {
   CAFE_CREATE_REVIEW_SUCCESS,
   CAFE_CREATE_REVIEW_FAIL,
   CAFE_CREATE_REVIEW_RESET,
+  CAFE_DELETE_REVIEW_REQUEST,
+  CAFE_DELETE_REVIEW_SUCCESS,
+  CAFE_DELETE_REVIEW_FAIL,
   CAFE_TOP_REQUEST,
   CAFE_TOP_SUCCESS,
   CAFE_TOP_FAIL,
@@ -31,7 +34,7 @@ import useAxios from '../utils/useAxios';
 export const listCafes = (keyword = '') => async (dispatch) => {
   try {
     dispatch({ type: CAFE_LIST_REQUEST })
-    const { data } = await axios.get(`${MY_API_URL}/api/cafes`)
+    const { data } = await axios.get(`${MY_API_URL}/api/cafes${keyword}`)
     dispatch({
       type: CAFE_LIST_SUCCESS,
       payload: data,
@@ -188,6 +191,31 @@ export const createCafeReview = (cafe_id, review) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: CAFE_CREATE_REVIEW_FAIL,
+      payload: error.response && error.response.data.detail
+        ? error.response.data.detail : error.message,
+    })
+  }
+}
+
+export const deleteCafeReview = (id) => async (dispatch, getState) => {
+  const axiosAuth = useAxios()
+  try {
+    dispatch({
+      type: CAFE_DELETE_REVIEW_REQUEST
+    })
+
+    const { data } = await axiosAuth.delete(
+      `${MY_API_URL}/api/cafes/delete_review/${id}/`,
+    )
+
+    dispatch({
+      type: CAFE_DELETE_REVIEW_SUCCESS,
+      payload: data
+    })
+
+  } catch (error) {
+    dispatch({
+      type: CAFE_DELETE_REVIEW_FAIL,
       payload: error.response && error.response.data.detail
         ? error.response.data.detail : error.message,
     })

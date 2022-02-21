@@ -27,25 +27,43 @@ const CafeCard = ({ cafe, displayData }) => {
         </Col>
         <Col md={8}>
           <Card.Body>
-            {
-              displayData === 'full'
-                ? (
-                  <Card.Title>{cafe.name}</Card.Title>
-                )
-                : (
-                  <LinkContainer to={`/cafe/${cafe.id}`}>
-                    <Card.Title>{cafe.name}</Card.Title>
-                  </LinkContainer>
-                )
-            }
+            <Row>
+              <Col md={8}>
+                {
+                  displayData === 'full'
+                    ? (
+                      <Card.Title>{cafe.name}</Card.Title>
+                    )
+                    : (
+                      <LinkContainer to={`/cafe/${cafe.id}`}>
+                        <Card.Title>{cafe.name}</Card.Title>
+                      </LinkContainer>
+                    )
+                }
+                <Card.Subtitle className="mb-2 text-muted">{cafe.location} (<Card.Link href={cafe.map_url}>Map</Card.Link>)</Card.Subtitle>
+              </Col>
+              <Col md={4} >
+                {cafe.rating
+                  &&
+                  <Card.Text className='text-muted text-wrap'>
+                    <span className='fs-1'>{Number(cafe.rating).toFixed(1)}</span> out of 5.0
+                  </Card.Text>
+                }
 
-            <Card.Subtitle className="mb-2 text-muted">{cafe.location} (<Card.Link href={cafe.map_url}>Map</Card.Link>)</Card.Subtitle>
+              </Col>
+
+            </Row>
             <Row>
               <Col>
                 <strong>Seats:</strong> {cafe.seats}
               </Col>
               <Col>
-                <strong>WiFi:</strong> {cafe.has_wifi ? 'Yes' : 'No'}
+                {
+                  cafe.num_reviews > 0
+                    ? <span className='text-muted text-wrap'>Reviewed {cafe.num_reviews} times.</span>
+                    : <span className='text-muted' > Not rated yet </span>
+                }
+
               </Col>
             </Row>
             <Row>
@@ -62,10 +80,7 @@ const CafeCard = ({ cafe, displayData }) => {
               </Col>
               <Col>
                 <strong>User Ratings:</strong>
-                {cafe.rating
-                  ? <span>{cafe.rating} of 5</span>
-                  : <span> Not rated yet </span>
-                }
+
               </Col>
             </Row>
             <Row>
@@ -73,10 +88,7 @@ const CafeCard = ({ cafe, displayData }) => {
                 <strong>Coffee price:</strong> {cafe.coffee_price}
               </Col>
               <Col>
-                {
-                  cafe.num_reviews > 0 &&
-                  <span>Reviewed {cafe.num_reviews} times.</span>
-                }
+                <strong>WiFi:</strong> {cafe.has_wifi ? 'Yes' : 'No'}
               </Col>
             </Row>
             {

@@ -1,6 +1,8 @@
 from django.shortcuts import render
 
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.utils import timezone
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
@@ -13,12 +15,28 @@ from ..cafes import cafes as dummy_cafes
 
 @api_view(["GET"])
 def get_cafes(request):
-    cafes = Cafe.objects.all()
+    items_per_page = 5
+
+    cafes = Cafe.objects.all().order_by("-date_edited")
+
+    page = request.query_params.get("page")
+    paginator = Paginator(cafes, items_per_page)
+
+    try:
+        cafes = paginator.page(page)
+    except PageNotAnInteger:
+        cafes = paginator.page(1)
+    except EmptyPage:
+        cafes = paginator.page(paginator.num_pages)
+
+    if page == None:
+        page = 1
+    page = int(page)
+
     serializer = CafeSerializer(cafes, many=True)
+
     return Response(
-        {
-            "cafes": serializer.data,
-        }
+        {"cafes": serializer.data, "page": page, "pages": paginator.num_pages}
     )
 
 
@@ -76,7 +94,6 @@ def load_dummies(request):
             coffee_price=cafe["coffee_price"],
             description=cafe["description"],
         )
-
     return Response(dummy_cafes)
 
 
@@ -127,7 +144,7 @@ def update_cafe(request, pk):
     if data["coffee_price"] != "":
         cafe.coffee_price = data["coffee_price"]
     cafe.description = data["description"]
-
+    cafe.date_edited = timezone.now()
     cafe.save()
     serializer = CafeSerializer(cafe, many=False)
 
@@ -164,11 +181,33 @@ def create_cafe_review(request, pk):
         reviews = cafe.review_set.all()
         cafe.num_reviews = len(reviews)
 
-        total = 0
-
-        for r in reviews:
-            total += r.rating
+        total = sum(r.rating for r in reviews)
         cafe.rating = total / len(reviews)
         cafe.save()
 
         return Response("Review added")
+
+
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
+def delete_review(request, pk):
+
+    review = Review.objects.get(id=pk)
+    cafe = review.cafe
+
+    if (review.user != request.user) and (not request.user.is_staff):
+        return Response(
+            {"detail": "Current user is not the author of this review nor admin user."},
+            status=status.HTTP_401_UNAUTHORIZED,
+        )
+    review.delete()
+
+    reviews = cafe.review_set.all()
+    cafe.num_reviews = len(reviews)
+
+    total = sum(r.rating for r in reviews)
+
+    cafe.rating = total / len(reviews)
+    cafe.save()
+
+    return Response("Review Deleted")
