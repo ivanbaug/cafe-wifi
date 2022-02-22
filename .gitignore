@@ -282,3 +282,7 @@ sketch
 # End of https://www.toptal.com/developers/gitignore/api/python,django,react
 .vscode/*
 venv/*
+rand_data.py
+
+# Allow react build directory
+!backend/front/*

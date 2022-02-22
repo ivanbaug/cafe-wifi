@@ -31,8 +31,6 @@ const HomeScreen = () => {
       dispatch({ type: CAFE_DELETE_RESET })
     }
     dispatch(listCafes(keyword))
-    console.log(query)
-
   }, [dispatch, errorDelete, keyword, navigate, successDelete])
 
   return (
@@ -40,11 +38,10 @@ const HomeScreen = () => {
       <Row>
         <Col md={9}>
           {
-            query && query === 'top'
-              ? <h3>Top Rated</h3>
-              : <h3>Latest entries</h3>
+            query && query === 'recent'
+              ? <h3>Latest entries</h3>
+              : <h3>Top Rated</h3>
           }
-
         </Col>
         <Col md={3}>
           <Dropdown>
@@ -54,7 +51,7 @@ const HomeScreen = () => {
 
             <Dropdown.Menu>
               <LinkContainer
-                to={`/?keyword=recent&page=1`}            >
+                to={`/?keyword=recent&page=1`}>
                 <Dropdown.Item >Recent</Dropdown.Item>
               </LinkContainer>
               <LinkContainer

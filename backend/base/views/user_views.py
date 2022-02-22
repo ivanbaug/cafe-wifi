@@ -8,6 +8,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from ..serializers import UserSerializer, UserSerializerWithToken
 from rest_framework_simplejwt.tokens import RefreshToken
+from ..rand_data import users as my_users
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -134,3 +135,21 @@ def delete_user(request, pk):
     user_for_deletion = User.objects.get(id=pk)
     user_for_deletion.delete()
     return Response("User was deleted.")
+
+
+# TODO: Comment this after tests
+@api_view(["GET"])
+@permission_classes([IsAdminUser])
+def load_test_users(request):
+    try:
+        for u in my_users:
+            user = User.objects.create(
+                first_name=u["name"],
+                username=u["email"],
+                email=u["email"],
+                password=make_password(u["password"]),
+            )
+        return Response("Done creating users")
+    except:
+        message = {"detail": "User with this email already exists"}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
