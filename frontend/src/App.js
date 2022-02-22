@@ -1,5 +1,5 @@
 import { Container } from 'react-bootstrap';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HomeScreen from './screens/HomeScreen';
@@ -13,7 +13,7 @@ import MyCafesScreen from './screens/MyCafesScreen';
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Header />
       <main className='py-3'>
         <Container className='cont-width'>
@@ -29,7 +29,7 @@ function App() {
         </Container>
       </main>
       <Footer />
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 

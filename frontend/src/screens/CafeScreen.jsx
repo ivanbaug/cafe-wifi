@@ -73,9 +73,13 @@ const CafeScreen = () => {
     if (successReviewDelete) {
       dispatch({ type: CAFE_DELETE_REVIEW_RESET })
     }
+    if (errorReviewDelete) {
+      window.alert(`Failed to delete. ${errorDelete}`)
+      dispatch({ type: CAFE_CREATE_REVIEW_RESET })
+    }
 
     dispatch(listCafeDetails(params.id))
-  }, [params, dispatch, errorDelete, successDelete, navigate, successCafeReview, successReviewDelete])
+  }, [params, dispatch, errorDelete, errorReviewDelete, successDelete, navigate, successCafeReview, successReviewDelete])
 
   return (
     <>

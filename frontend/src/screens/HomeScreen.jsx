@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
+import { Row, Col, Dropdown } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import { LinkContainer } from 'react-router-bootstrap';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { listCafes } from '../actions/cafeActions'
 import CafeCard from '../components/CafeCard';
@@ -14,6 +16,8 @@ const HomeScreen = () => {
   const location = useLocation()
 
   let keyword = location.search
+  let lparams = new URLSearchParams(keyword)
+  let query = lparams.get('keyword')
 
   const cafeList = useSelector(state => state.cafeList)
   const { error, loading, cafes, page, pages } = cafeList
@@ -27,12 +31,41 @@ const HomeScreen = () => {
       dispatch({ type: CAFE_DELETE_RESET })
     }
     dispatch(listCafes(keyword))
+    console.log(query)
 
   }, [dispatch, errorDelete, keyword, navigate, successDelete])
 
   return (
     <>
-      <h3>Latest entries</h3>
+      <Row>
+        <Col md={9}>
+          {
+            query && query === 'top'
+              ? <h3>Top Rated</h3>
+              : <h3>Latest entries</h3>
+          }
+
+        </Col>
+        <Col md={3}>
+          <Dropdown>
+            <Dropdown.Toggle variant="light" id="dropdown-sort">
+              Sort by
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>
+              <LinkContainer
+                to={`/?keyword=recent&page=1`}            >
+                <Dropdown.Item >Recent</Dropdown.Item>
+              </LinkContainer>
+              <LinkContainer
+                to={`/?keyword=top&page=1`}>
+                <Dropdown.Item >Top Rated</Dropdown.Item>
+              </LinkContainer>
+            </Dropdown.Menu>
+          </Dropdown>
+
+        </Col>
+      </Row>
       {loadingDelete && <Loader />}
       {
         loading

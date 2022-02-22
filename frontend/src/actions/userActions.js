@@ -16,7 +16,7 @@ import {
   USER_UPDATE_PROFILE_REQUEST,
   USER_UPDATE_PROFILE_SUCCESS,
   USER_UPDATE_PROFILE_FAIL,
-  USER_UPDATE_PROFILE_RESET,
+  // USER_UPDATE_PROFILE_RESET,
   USER_LIST_REQUEST,
   USER_LIST_SUCCESS,
   USER_LIST_FAIL,
@@ -27,8 +27,8 @@ import {
   USER_UPDATE_REQUEST,
   USER_UPDATE_SUCCESS,
   USER_UPDATE_FAIL,
-  USER_UPDATE_RESET,
-  REFRESH_TOKEN,
+  // USER_UPDATE_RESET,
+  // REFRESH_TOKEN,
 } from "../constants/userConstants";
 import useAxios from '../utils/useAxios';
 
@@ -67,7 +67,6 @@ export const logout = () => (dispatch) => {
   localStorage.removeItem('authToken')
   dispatch({ type: USER_LOGOUT })
   dispatch({ type: USER_DETAILS_RESET })
-  // dispatch({ type: ORDER_LIST_MY_RESET })
   dispatch({ type: USER_LIST_RESET })
   dispatch({ type: USER_REGISTER_RESET })
 }

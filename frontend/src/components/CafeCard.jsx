@@ -116,7 +116,7 @@ const CafeCard = ({ cafe, displayData }) => {
                 )
             }
             {
-              (userInfo && (userInfo.user_id === cafe.user)) &&
+              (userInfo && (userInfo.user_id === cafe.user || userInfo.is_admin)) &&
               <Row>
                 <ButtonGroup className='px-2' aria-label="Author options">
                   <LinkContainer to={`/cafe/${cafe.id}/edit`}>
