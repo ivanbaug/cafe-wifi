@@ -10,9 +10,10 @@ from rest_framework.response import Response
 
 from ..serializers import CafeSerializer, ReviewSerializer
 from ..models import Cafe, Review
-from ..rand_data import cafes as dummy_cafes
-from ..rand_data import comments as dummy_comments
-import random
+
+# from ..rand_data import cafes as dummy_cafes
+# from ..rand_data import comments as dummy_comments
+# import random
 
 
 @api_view(["GET"])
@@ -203,55 +204,55 @@ def delete_review(request, pk):
     return Response("Review Deleted")
 
 
-@api_view(["GET"])
-@permission_classes([IsAdminUser])
-def load_dummies(request):
-    user = User.objects.get(email="iv@dmin.com")
-    for cafe in dummy_cafes:
-        print(f"loading {cafe['name']}")
-        new_cafe = Cafe.objects.create(
-            user=user,
-            name=cafe["name"],
-            map_url=cafe["map_url"],
-            img_url=cafe["img_url"],
-            location=cafe["location"],
-            seats=int("".join(filter(str.isdigit, cafe["seats"]))),
-            has_toilet=cafe["has_toilet"],
-            has_wifi=cafe["has_wifi"],
-            has_sockets=cafe["has_sockets"],
-            can_take_calls=cafe["can_take_calls"],
-            coffee_price=cafe["coffee_price"],
-            description=cafe["description"],
-        )
-    return Response(dummy_cafes)
+# @api_view(["GET"])
+# @permission_classes([IsAdminUser])
+# def load_dummies(request):
+#     user = User.objects.get(email="iv@dmin.com")
+#     for cafe in dummy_cafes:
+#         print(f"loading {cafe['name']}")
+#         new_cafe = Cafe.objects.create(
+#             user=user,
+#             name=cafe["name"],
+#             map_url=cafe["map_url"],
+#             img_url=cafe["img_url"],
+#             location=cafe["location"],
+#             seats=int("".join(filter(str.isdigit, cafe["seats"]))),
+#             has_toilet=cafe["has_toilet"],
+#             has_wifi=cafe["has_wifi"],
+#             has_sockets=cafe["has_sockets"],
+#             can_take_calls=cafe["can_take_calls"],
+#             coffee_price=cafe["coffee_price"],
+#             description=cafe["description"],
+#         )
+#     return Response(dummy_cafes)
 
 
-@api_view(["GET"])
-@permission_classes([IsAdminUser])
-def load_dummy_reviews(request):
-    users = User.objects.all()
-    cafes = Cafe.objects.all()
-    user_list = [user.username for user in users]
-    for cafe in cafes:
-        random.shuffle(user_list)
-        for i in range(random.randint(2, len(user_list))):
-            # cafe = next((i for i in dummy_cafes if i["id"] == int(pk)), None)
-            user = next((u for u in users if u.username == user_list[i]), None)
-            if user:
-                rev = random.choice(dummy_comments)
-                review = Review.objects.create(
-                    user=user,
-                    cafe=cafe,
-                    name=user.first_name,
-                    title=rev["title"],
-                    rating=rev["rating"],
-                    comment=rev["comment"],
-                )
-        reviews = cafe.review_set.all()
-        cafe.num_reviews = len(reviews)
+# @api_view(["GET"])
+# @permission_classes([IsAdminUser])
+# def load_dummy_reviews(request):
+#     users = User.objects.all()
+#     cafes = Cafe.objects.all()
+#     user_list = [user.username for user in users]
+#     for cafe in cafes:
+#         random.shuffle(user_list)
+#         for i in range(random.randint(2, len(user_list))):
+#             # cafe = next((i for i in dummy_cafes if i["id"] == int(pk)), None)
+#             user = next((u for u in users if u.username == user_list[i]), None)
+#             if user:
+#                 rev = random.choice(dummy_comments)
+#                 review = Review.objects.create(
+#                     user=user,
+#                     cafe=cafe,
+#                     name=user.first_name,
+#                     title=rev["title"],
+#                     rating=rev["rating"],
+#                     comment=rev["comment"],
+#                 )
+#         reviews = cafe.review_set.all()
+#         cafe.num_reviews = len(reviews)
 
-        total = sum(r.rating for r in reviews)
-        cafe.rating = total / len(reviews)
-        cafe.save()
+#         total = sum(r.rating for r in reviews)
+#         cafe.rating = total / len(reviews)
+#         cafe.save()
 
-    return Response("Reviews added")
+#     return Response("Reviews added")
