@@ -9,7 +9,7 @@ ENV PYTHONUNBUFFERED True
 ENV APP_HOME /app
 WORKDIR $APP_HOME
 # This directory may change depending of the git folder distribution
-COPY . ./backend
+COPY ./backend ./
 
 # Install production dependencies.
 RUN apt-get update \
