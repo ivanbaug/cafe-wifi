@@ -203,7 +203,6 @@ def delete_review(request, pk):
     return Response("Review Deleted")
 
 
-# TODO: Comment this after tests
 @api_view(["GET"])
 @permission_classes([IsAdminUser])
 def load_dummies(request):
@@ -227,7 +226,6 @@ def load_dummies(request):
     return Response(dummy_cafes)
 
 
-# TODO: Comment this after tests
 @api_view(["GET"])
 @permission_classes([IsAdminUser])
 def load_dummy_reviews(request):

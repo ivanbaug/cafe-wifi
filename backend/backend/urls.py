@@ -25,3 +25,5 @@ urlpatterns = [
     path("api/cafes/", include("base.urls.cafe_urls")),
     path("api/users/", include("base.urls.user_urls")),
 ]
+
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
