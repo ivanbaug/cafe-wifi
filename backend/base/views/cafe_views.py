@@ -30,8 +30,11 @@ def get_cafes(request):
 
     if query == "recent":
         req_order = "-date_edited"
+        cafes = Cafe.objects.all().order_by(req_order)
 
-    cafes = Cafe.objects.all().order_by(req_order)
+    else:
+        # General case, sort by rating
+        cafes = Cafe.objects.all().order_by(req_order).exclude(rating__isnull=True)
 
     page = request.query_params.get("page")
     paginator = Paginator(cafes, items_per_page)

@@ -178,7 +178,6 @@ STATIC_URL = "static/"
 
 STATICFILES_DIRS = [
     BASE_DIR / "front/build/static",
-    # BASE_DIR / "front/build/res",
 ]
 
 
