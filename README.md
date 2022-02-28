@@ -1,7 +1,7 @@
 # Share and rate your coffee shops
 
 This is the second version of a site for cafe sharing and ratings. Now using React and Django. [Previous version](https://github.com/ivanbaug/coffee-wifi-site) used flask and jinja templating. It improved noticeably in UI and responsiveness.
-### Chack the demo:
+### Check the demo:
 https://cafe-wifi-yctxl3no4a-ue.a.run.app/
 
 ## New Features
