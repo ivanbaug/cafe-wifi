@@ -20,8 +20,8 @@ https://cafe-wifi-yctxl3no4a-ue.a.run.app/
 
 ## Images
 
-![homepage](https://ivanotes.s3.amazonaws.com/0060-cafe2.png)
-![edit page](https://ivanotes.s3.amazonaws.com/0061-cafe3.png)
-![review field](https://ivanotes.s3.amazonaws.com/0062-cafe4.png)
-![mobile login](https://ivanotes.s3.amazonaws.com/0063-cafe5.png)
-![mobile reviews](https://ivanotes.s3.amazonaws.com/0064-cafe6.png)
+![homepage](https://ivanotes.s3.amazonaws.com/img/0060-cafe2.png)
+![edit page](https://ivanotes.s3.amazonaws.com/img/0061-cafe3.png)
+![review field](https://ivanotes.s3.amazonaws.com/img/0062-cafe4.png)
+![mobile login](https://ivanotes.s3.amazonaws.com/img/0063-cafe5.png)
+![mobile reviews](https://ivanotes.s3.amazonaws.com/img/0064-cafe6.png)
